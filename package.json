@@ -1,0 +1,29 @@
+{
+  "name": "kie-next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@sanity/vision": "^5.19.0",
+    "gsap": "^3.14.2",
+    "next": "^15.5.14",
+    "next-sanity": "^10.1.4",
+    "next-view-transitions": "^0.3.5",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "sanity": "^4.22.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.29",
+    "typescript": "^5"
+  }
+}
