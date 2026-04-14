@@ -24,6 +24,12 @@ export const siteSettingsSchema = defineType({
       description: 'Файл CV для скачивания на странице контактов',
     }),
     defineField({
+      name: 'qrImage',
+      title: 'QR Code Image',
+      type: 'image',
+      description: 'QR-код на странице контактов',
+    }),
+    defineField({
       name: 'posterBgImage',
       title: 'Poster Background Image',
       type: 'image',

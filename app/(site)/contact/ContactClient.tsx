@@ -3,7 +3,7 @@
 import Copy from '@/components/Copy'
 import { usePageTransition } from '@/components/TransitionContext'
 
-export default function ContactClient({ cvUrl }: { cvUrl: string | null }) {
+export default function ContactClient({ cvUrl, qrUrl }: { cvUrl: string | null; qrUrl: string | null }) {
   const { handleClose } = usePageTransition()
 
   return (
@@ -40,7 +40,7 @@ export default function ContactClient({ cvUrl }: { cvUrl: string | null }) {
         </div>
 
         <div className="contactcolumn inverse">
-          <img src="/images/qr-2.svg" loading="lazy" alt="" />
+          <img src={qrUrl ?? '/images/qr-2.svg'} loading="lazy" alt="" />
         </div>
 
         <div className="contactcolumn">
