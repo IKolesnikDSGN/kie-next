@@ -102,7 +102,7 @@ export default function Copy({
         const wrapper = wrapperRef.current
         if (!inner || !wrapper) return
 
-        gsap.set(inner, { y: '110%' })
+        gsap.set(inner, { y: '130%' })
 
         const play = () => {
           const transitionDelay = document.documentElement.dataset.pageTransition ? 0.3 : 0
@@ -149,12 +149,12 @@ export default function Copy({
         cloneElement(childArray[0] as ReactElement<any>, {
           ref: innerRef,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          style: { paddingBottom: '4px', ...(childArray[0] as ReactElement<any>).props.style },
+          style: { paddingBottom: '0.2em', ...(childArray[0] as ReactElement<any>).props.style },
         })
       : childArray[0]
 
     return (
-      <div ref={wrapperRef} style={{ overflow: 'hidden' }}>
+      <div ref={wrapperRef} style={{ overflow: 'hidden', paddingBottom: '0.2em', marginBottom: '-0.2em' }}>
         {child}
       </div>
     )

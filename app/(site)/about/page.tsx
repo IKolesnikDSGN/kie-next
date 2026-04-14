@@ -3,8 +3,38 @@ import Copy from '@/components/Copy'
 import SmoothScroll from '@/components/SmoothScroll'
 import PosterLogo from '@/components/PosterLogo'
 import InfoTooltip from '@/components/InfoTooltip'
+import MoscowTime from '@/components/MoscowTime'
+import { client } from '@/lib/sanity'
 
-export default function AboutPage() {
+type SkillItem = { name: string; iconUrl: string | null }
+
+async function getSiteData() {
+  const data = await client.fetch<{
+    bgUrl: string | null
+    fgUrl: string | null
+    skills: SkillItem[]
+  }>(
+    `*[_type == "siteSettings" && _id == "siteSettings"][0]{
+      "bgUrl": posterBgImage.asset->url,
+      "fgUrl": posterFgImage.asset->url,
+      "skills": skills[]{
+        "name": name,
+        "iconUrl": icon.asset->url
+      }
+    }`,
+    {},
+    { next: { revalidate: 60 } }
+  )
+  return {
+    bgUrl: data?.bgUrl ?? '/images/site-1.png',
+    fgUrl: data?.fgUrl ?? '/images/site.png',
+    skills: data?.skills ?? [],
+  }
+}
+
+export default async function AboutPage() {
+  const { bgUrl, fgUrl, skills } = await getSiteData()
+
   return (
     <>
       <div className="about-overlay" />
@@ -12,7 +42,7 @@ export default function AboutPage() {
         <div className="poster-wrap">
           <Image
             className="poster-media"
-            src="/images/site-1.png"
+            src={bgUrl}
             alt=""
             fill
             sizes="(max-width: 1688px) 100vw, 1688px"
@@ -23,7 +53,7 @@ export default function AboutPage() {
           </div>
           <Image
             className="poster-media is-forground"
-            src="/images/site.png"
+            src={fgUrl}
             alt=""
             fill
             sizes="(max-width: 1688px) 100vw, 1688px"
@@ -133,11 +163,16 @@ export default function AboutPage() {
               </Copy>
             </div>
             <div className="a-grid">
-              {['figma', 'figma', 'figma', 'figma', 'figma', 'figma'].map((skill, i) => (
+              {skills.map((skill, i) => (
                 <div className="skill-item" key={i}>
+                  {skill.iconUrl && (
+                    <div className="skill-img-wrap">
+                      <Image src={skill.iconUrl} alt={skill.name} fill style={{ objectFit: 'contain' }} />
+                    </div>
+                  )}
                   <div className="skill-descriptor">
                     <Copy>
-                      <div className="label">{skill}</div>
+                      <div className="label">{skill.name}</div>
                     </Copy>
                   </div>
                 </div>
@@ -174,9 +209,7 @@ export default function AboutPage() {
               </Copy>
             </div>
             <div className="a-list">
-              <Copy>
-                <h4 className="a-list-item is-secondary margin-btm">GMT +3, Georgia</h4>
-              </Copy>
+              <MoscowTime />
               <div className="a-list-tag">
                 <Copy split={false}>
                   <div className="tag is-tertiary">
@@ -185,7 +218,9 @@ export default function AboutPage() {
                 </Copy>
               </div>
               <Copy>
-                <h4 className="a-list-item">Telegram</h4>
+                <a href="https://t.me/IgorDsgn" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                  <h4 className="a-list-item">IgorDsgn</h4>
+                </a>
               </Copy>
               <div className="a-list-tag">
                 <Copy split={false}>
@@ -195,7 +230,9 @@ export default function AboutPage() {
                 </Copy>
               </div>
               <Copy>
-                <h4 className="a-list-item">kolesnikig25@gmail.com</h4>
+                <a href="mailto:kolesnikig25@gmail.com" style={{ textDecoration: 'none' }}>
+                  <h4 className="a-list-item">kolesnikig25@gmail.com</h4>
+                </a>
               </Copy>
             </div>
           </div>
@@ -203,12 +240,12 @@ export default function AboutPage() {
           <div className="a-btm">
             <Copy split={false}>
               <div className="tag is-tertiary">
-                <p className="label">2025</p>
+                <p className="label">{new Date().getFullYear()}</p>
               </div>
             </Copy>
             <Copy split={false}>
               <div className="tag is-tertiary">
-                <p className="label">privacy policy</p>
+                <p className="label">all rights reserved</p>
               </div>
             </Copy>
           </div>

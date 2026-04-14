@@ -746,6 +746,7 @@ textarea:focus-visible {
 
 .contactlink {
   margin-top: var(--_spacing---space--3);
+  transition: opacity 0.3s ease;
 }
 
 .contactlink.contactmargin-bottom {
@@ -851,11 +852,22 @@ textarea:focus-visible {
   letter-spacing: var(--_typography---letter-spacing--huge);
   text-transform: uppercase;
   color: var(--_theme---text);
-  transition: color 0.5s ease;
+  transition: opacity 0.3s ease;
 }
 
 .nav-link.active {
   color: var(--_theme---text-link--text-active);
+}
+
+/* ============================================================
+   9. LINK HOVER
+   ============================================================ */
+
+.nav-link:not(.active):hover,
+button.link:hover,
+a:hover .contactlink,
+a:hover .a-list-item {
+  opacity: 0.4;
 }
 
 /* ============================================================
@@ -973,9 +985,9 @@ textarea:focus-visible {
   inset: 0;
   background: linear-gradient(
     90deg,
-    #1a1a1a 25%,
-    #2c2c2c 50%,
-    #1a1a1a 75%
+    #808080 25%,
+    #787878 50%,
+    #626262 75%
   );
   background-size: 200% 100%;
   animation: img-shimmer 1.6s ease-in-out infinite;
@@ -1307,6 +1319,10 @@ textarea:focus-visible {
   margin-top: var(--_spacing---space--4);
 }
 
+.a-list-item {
+  transition: opacity 0.3s ease;
+}
+
 .a-list-item.is-secondary {
   color: var(--_theme---text-secondary);
 }
@@ -1337,6 +1353,12 @@ textarea:focus-visible {
 .skill-icon {
   width: 50%;
   max-width: none;
+  height: 50%;
+}
+
+.skill-img-wrap {
+  position: relative;
+  width: 50%;
   height: 50%;
 }
 
