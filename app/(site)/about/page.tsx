@@ -77,7 +77,7 @@ export default async function AboutPage() {
           <div style={{ width: '40rem', marginBottom: '3rem' }}>
             <Copy animateOnScroll={false} delay={0.8}>
               <h2 className="about-h2">
-                My name is Igor and I am a product designer. My mission is to create unique designs, user-friendly interfaces. And attractive interfaces that are not only beautiful but also effective.
+                My name is Igor and I am a designer, developer and brand identity creator. My mission is to craft experiences — from pixel-perfect interfaces to visual identities that leave a lasting impression.
               </h2>
             </Copy>
           </div>
@@ -91,22 +91,22 @@ export default async function AboutPage() {
               </Copy>
             </div>
             <div className="a-list">
-              <InfoTooltip text="UI/UX Design descriptor">
+              <InfoTooltip text="Intuitive interfaces, backed by research">
                 <Copy>
                   <h4 className="a-list-item">UI/UX Design</h4>
                 </Copy>
               </InfoTooltip>
-              <InfoTooltip text="Web Design descriptor">
+              <InfoTooltip text="Clean layouts that convert and impress">
                 <Copy>
                   <h4 className="a-list-item">Web Design</h4>
                 </Copy>
               </InfoTooltip>
-              <InfoTooltip text="Web Development descriptor">
+              <InfoTooltip text="Webflow or advanced stack — whatever the project demands">
                 <Copy>
                   <h4 className="a-list-item">Web Development</h4>
                 </Copy>
               </InfoTooltip>
-              <InfoTooltip text="Branding descriptor">
+              <InfoTooltip text="Visual identity that's consistent and impossible to ignore">
                 <Copy>
                   <h4 className="a-list-item">Branding</h4>
                 </Copy>
@@ -118,17 +118,17 @@ export default async function AboutPage() {
                   </div>
                 </Copy>
               </div>
-              <InfoTooltip text="Art Direction descriptor">
+              <InfoTooltip text="Creative vision across every touchpoint">
                 <Copy>
                   <h4 className="a-list-item is-secondary">Art Direction</h4>
                 </Copy>
               </InfoTooltip>
-              <InfoTooltip text="Design Support descriptor">
+              <InfoTooltip text="A skilled extra hand when you need to move faster">
                 <Copy>
                   <h4 className="a-list-item is-secondary">Design Support</h4>
                 </Copy>
               </InfoTooltip>
-              <InfoTooltip text="App Design descriptor">
+              <InfoTooltip text="Native-feeling mobile interfaces, smooth by design">
                 <Copy>
                   <h4 className="a-list-item is-secondary">App Design</h4>
                 </Copy>
@@ -146,10 +146,10 @@ export default async function AboutPage() {
             </div>
             <div className="a-list">
               <Copy>
-                <h4>Start from $1 500</h4>
+                <h4>Start from $2 000</h4>
               </Copy>
               <Copy>
-                <p className="a-p">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</p>
+                <p className="a-p">Every project is different — scope, complexity and goals all shape the final number. I don't do one-size-fits-all pricing. After a detailed brief, you get a clear estimate with no surprises. Let's talk about what you need and I'll put together a number that makes sense for both of us.</p>
               </Copy>
             </div>
           </div>
@@ -188,12 +188,12 @@ export default async function AboutPage() {
                 </div>
               </Copy>
               <Copy>
-                <p className="a-p is-small">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</p>
+                <p className="a-p is-small">I started as an engineer, which shaped the way I think about design — systematically, with attention to every detail. Today I bring that same precision to interfaces, products and visual identities. When I'm not pushing pixels, I'm probably being judged by my cat. I'm told I'm kind. He disagrees.</p>
               </Copy>
             </div>
             <div style={{ paddingBottom: '20rem' }} className="a-list">
               <Copy>
-                <h4>My name is Igor and I am a product designer. My mission is to create unique designs, user-friendly interfaces. And attractive interfaces that are not only beautiful but also effective.</h4>
+                <h4>My name is Igor. I design interfaces, build products and craft visual identities. Somewhere between engineering and aesthetics — that's where I do my best work.</h4>
               </Copy>
             </div>
           </div>

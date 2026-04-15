@@ -154,7 +154,7 @@ export default function Copy({
       : childArray[0]
 
     return (
-      <div ref={wrapperRef} style={{ overflow: 'hidden', paddingBottom: '0.2em', marginBottom: '-0.2em' }}>
+      <div ref={wrapperRef} style={{ overflow: 'hidden', paddingBottom: '0em', marginBottom: '-0em' }}>
         {child}
       </div>
     )

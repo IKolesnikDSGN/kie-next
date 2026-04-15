@@ -1,4 +1,5 @@
 import Copy from '@/components/Copy'
+import TransitionLink from '@/components/TransitionLink'
 
 export default function IndexPage() {
   return (
@@ -12,6 +13,9 @@ export default function IndexPage() {
         <p className="index-subtext">
           For small – medium businesses, startups, and fellow professionals striving for growth and new opportunities
         </p>
+      </Copy>
+      <Copy animateOnScroll={false} delay={0.85} split={false}>
+        <TransitionLink href="/work" className="btn-primary">portfolio</TransitionLink>
       </Copy>
     </div>
   )
