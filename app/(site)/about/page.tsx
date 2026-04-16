@@ -4,6 +4,7 @@ import SmoothScroll from '@/components/SmoothScroll'
 import PosterLogo from '@/components/PosterLogo'
 import InfoTooltip from '@/components/InfoTooltip'
 import MoscowTime from '@/components/MoscowTime'
+import HeDisagrees from '@/components/HeDisagrees'
 import { client } from '@/lib/sanity'
 
 type SkillItem = { name: string; iconUrl: string | null }
@@ -12,11 +13,13 @@ async function getSiteData() {
   const data = await client.fetch<{
     bgUrl: string | null
     fgUrl: string | null
+    heDisagreesUrl: string | null
     skills: SkillItem[]
   }>(
     `*[_type == "siteSettings" && _id == "siteSettings"][0]{
       "bgUrl": posterBgImage.asset->url,
       "fgUrl": posterFgImage.asset->url,
+      "heDisagreesUrl": heDisagreesImage.asset->url,
       "skills": skills[]{
         "name": name,
         "iconUrl": icon.asset->url
@@ -28,12 +31,13 @@ async function getSiteData() {
   return {
     bgUrl: data?.bgUrl ?? '/images/site-1.png',
     fgUrl: data?.fgUrl ?? '/images/site.png',
+    heDisagreesUrl: data?.heDisagreesUrl ?? '/images/photo_2026-04-16 09.40.37.jpeg',
     skills: data?.skills ?? [],
   }
 }
 
 export default async function AboutPage() {
-  const { bgUrl, fgUrl, skills } = await getSiteData()
+  const { bgUrl, fgUrl, heDisagreesUrl, skills } = await getSiteData()
 
   return (
     <>
@@ -188,7 +192,7 @@ export default async function AboutPage() {
                 </div>
               </Copy>
               <Copy>
-                <p className="a-p is-small">I started as an engineer, which shaped the way I think about design — systematically, with attention to every detail. Today I bring that same precision to interfaces, products and visual identities. When I'm not pushing pixels, I'm probably being judged by my cat. I'm told I'm kind. He disagrees.</p>
+                <p className="a-p is-small">I started as an engineer, which shaped the way I think about design — systematically, with attention to every detail. Today I bring that same precision to interfaces, products and visual identities. When I'm not pushing pixels, I'm probably being judged by my cat. I'm told I'm kind. <HeDisagrees src={heDisagreesUrl} /></p>
               </Copy>
             </div>
             <div style={{ paddingBottom: '20rem' }} className="a-list">

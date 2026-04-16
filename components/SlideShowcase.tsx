@@ -329,7 +329,8 @@ export default function SlideShowcase() {
 
   const slideRefs = useRef<(HTMLDivElement | null)[]>([])
   const innerRefs = useRef<(HTMLDivElement | null)[]>([])
-  const cursorRef = useRef<HTMLDivElement>(null)
+  const cursorRef = useRef<HTMLDivElement>(null)   // wrapper — двигается за мышью
+  const cursorBadgeRef = useRef<HTMLDivElement>(null) // badge — scale анимация
   const isAnimating = useRef(false)
   const activeIndexRef = useRef(0)
   const slidesRef = useRef(slides)
@@ -426,6 +427,7 @@ export default function SlideShowcase() {
       duration: 1.2,
       ease: 'expo.inOut',
       onComplete: () => {
+        const prevIndex = activeIndexRef.current
         slideRefs.current.forEach((el, i) => {
           if (el) gsap.set(el, { zIndex: i === nextIndex ? 1 : 0 })
         })
@@ -433,11 +435,15 @@ export default function SlideShowcase() {
         isAnimating.current = false
         signalSlideIndex(nextIndex)
         setActiveSlideIndex(nextIndex)
-        // Сбрасываем позицию скролла при смене слайда
+        // Сбрасываем lerp-состояние для нового активного слайда
         scrollTargetY.current = 0
         scrollCurrentY.current = 0
-        const overlay = slideRefs.current[nextIndex]?.querySelector('.slide-scroll-overlay') as HTMLElement | null
-        if (overlay) overlay.scrollTop = 0
+        // Сбрасываем scrollTop уходящего слайда с задержкой — он уже скрыт,
+        // задержка нужна как буфер на случай медленных устройств
+        setTimeout(() => {
+          const prevOverlay = slideRefs.current[prevIndex]?.querySelector('.slide-scroll-overlay') as HTMLElement | null
+          if (prevOverlay) prevOverlay.scrollTop = 0
+        }, 600)
       },
     })
 
@@ -542,6 +548,9 @@ export default function SlideShowcase() {
   // ─── Click + Cursor (window-level) ───────────────────────────────────────────
 
   useEffect(() => {
+    // Читаем рефы напрямую в хэндлерах — cursorRef.current может быть null
+    // при первом запуске эффекта (до загрузки слайдов), захват один раз не подходит
+
     const isInMainContainer = (e: MouseEvent) => {
       const main = document.querySelector('.main-container')
       return main ? main.contains(e.target as Node) : false
@@ -556,66 +565,154 @@ export default function SlideShowcase() {
       else prev()
     }
 
-    let cursorVisible = false
-    const setCursorVisible = (visible: boolean) => {
-      if (visible === cursorVisible) return
-      cursorVisible = visible
-      document.body.style.cursor = visible ? 'none' : ''
-      gsap.to(cursorRef.current, {
-        opacity: visible ? 1 : 0,
-        duration: 0.15,
-        ease: visible ? 'power1.out' : 'power1.in',
+    // Lerp-позиция wrapper-а
+    const pos = { x: 0, y: 0, tx: 0, ty: 0 }
+    let lerpRaf: number | null = null
+
+    const startLerp = () => {
+      if (lerpRaf !== null) return
+      const LERP = 0.1
+      const tick = () => {
+        pos.x += (pos.tx - pos.x) * LERP
+        pos.y += (pos.ty - pos.y) * LERP
+        const w = cursorRef.current
+        if (w) {
+          w.style.left = pos.x + 'px'
+          w.style.top = pos.y + 'px'
+        }
+        lerpRaf = requestAnimationFrame(tick)
+      }
+      lerpRaf = requestAnimationFrame(tick)
+    }
+
+    const stopLerp = () => {
+      if (lerpRaf !== null) {
+        cancelAnimationFrame(lerpRaf)
+        lerpRaf = null
+      }
+    }
+
+    // Смена текста через crossfade на badge
+    let currentText = ''
+    const setText = (text: string) => {
+      const b = cursorBadgeRef.current
+      if (!b || text === currentText) return
+      currentText = text
+      gsap.to(b, {
+        opacity: 0,
+        duration: 0.12,
+        ease: 'power1.in',
+        onComplete: () => {
+          b.textContent = text
+          gsap.to(b, { opacity: 1, duration: 0.12, ease: 'power1.out' })
+        },
       })
     }
 
-    const handleMouseMove = (e: MouseEvent) => {
-      const cursor = cursorRef.current
-      if (!cursor) return
-      cursor.style.left = e.clientX + 'px'
-      cursor.style.top = e.clientY + 'px'
-      const inMain = isInMainContainer(e)
-      setCursorVisible(!inMain)
-      if (!inMain) {
-        cursor.textContent = e.clientX > window.innerWidth / 2 ? 'next' : 'previous'
+    // Scale на badge — не конфликтует с transform на wrapper-е
+    let badgeVisible = false
+    const setBadgeVisible = (visible: boolean) => {
+      const b = cursorBadgeRef.current
+      if (visible === badgeVisible || !b) return
+      badgeVisible = visible
+      if (visible) {
+        startLerp()
+        gsap.to(b, { scale: 1, duration: 0.25, ease: 'back.out(1.5)' })
+      } else {
+        gsap.to(b, { scale: 0, duration: 0.2, ease: 'power2.in', onComplete: stopLerp })
       }
     }
+
+    const getScrollOverlayRect = (): DOMRect | null => {
+      const activeSlide = slidesRef.current[activeIndexRef.current]
+      if (activeSlide?._type !== 'bgScrollSlide') return null
+      const overlay = slideRefs.current[activeIndexRef.current]?.querySelector('.slide-scroll-overlay') as HTMLElement | null
+      return overlay ? overlay.getBoundingClientRect() : null
+    }
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const w = cursorRef.current
+      const b = cursorBadgeRef.current
+      if (!w || !b) return
+      pos.tx = e.clientX
+      pos.ty = e.clientY
+      const inMain = isInMainContainer(e)
+
+      if (inMain) {
+        setBadgeVisible(false)
+        return
+      }
+
+      const scrollRect = getScrollOverlayRect()
+      const overScroll = scrollRect
+        ? e.clientX >= scrollRect.left && e.clientX <= scrollRect.right
+          && e.clientY >= scrollRect.top && e.clientY <= scrollRect.bottom
+        : false
+      const newText = overScroll ? 'scroll' : (e.clientX > window.innerWidth / 2 ? 'next' : 'previous')
+
+      if (!badgeVisible) {
+        // Первое появление: снапаем позицию и текст мгновенно
+        pos.x = e.clientX
+        pos.y = e.clientY
+        w.style.left = pos.x + 'px'
+        w.style.top = pos.y + 'px'
+        b.textContent = newText
+        currentText = newText
+      } else {
+        setText(newText)
+      }
+
+      setBadgeVisible(true)
+    }
+
+    // Инициализация badge: скрыт через scale (когда элемент уже смонтирован)
+    const initBadge = () => {
+      const b = cursorBadgeRef.current
+      if (b) gsap.set(b, { scale: 0, opacity: 1 })
+    }
+    initBadge()
 
     window.addEventListener('click', handleClick)
     window.addEventListener('mousemove', handleMouseMove)
 
-    const cursor = cursorRef.current
     return () => {
       window.removeEventListener('click', handleClick)
       window.removeEventListener('mousemove', handleMouseMove)
-      document.body.style.cursor = ''
-      if (cursor) gsap.to(cursor, { opacity: 0, duration: 0.15, ease: 'power1.in' })
+      stopLerp()
+      const b = cursorBadgeRef.current
+      if (b) gsap.set(b, { scale: 0 })
     }
   }, [next, prev, pathname])
 
   // ─── Render ───────────────────────────────────────────────────────────────────
-
-  if (!slides.length) return null
+  //
+  // Cursor всегда в DOM (вне проверки slides.length), иначе ref будет null
+  // при первом запуске эффекта — до загрузки слайдов.
 
   return (
-    <div className="slide-interactor">
-      {slides.map((slide, i) => (
-        <div
-          key={slide._key}
-          ref={(el) => { slideRefs.current[i] = el }}
-          className="case-item"
-        >
-          <div
-            ref={(el) => { innerRefs.current[i] = el }}
-            className="case-item-inner"
-          >
-            {revealedSlides.has(i) && renderSlideContent(slide, i === activeSlideIndex)}
-          </div>
+    <>
+      {slides.length > 0 && (
+        <div className="slide-interactor">
+          {slides.map((slide, i) => (
+            <div
+              key={slide._key}
+              ref={(el) => { slideRefs.current[i] = el }}
+              className="case-item"
+            >
+              <div
+                ref={(el) => { innerRefs.current[i] = el }}
+                className="case-item-inner"
+              >
+                {revealedSlides.has(i) && renderSlideContent(slide, i === activeSlideIndex)}
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
 
       <div ref={cursorRef} className="slide-cursor">
-        next
+        <div ref={cursorBadgeRef} className="slide-cursor-badge">next</div>
       </div>
-    </div>
+    </>
   )
 }

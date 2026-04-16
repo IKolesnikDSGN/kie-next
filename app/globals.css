@@ -978,17 +978,19 @@ a:hover .a-list-item {
   position: fixed;
   pointer-events: none;
   transform: translate(-50%, -50%);
-  opacity: 0;
   z-index: 9999;
-  font-size: var(--_typography---font-size--label);
+}
+
+.slide-cursor-badge {
+  font-size: 10px;
   font-family: var(--_typography---font-family--mono);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.02em;
   color: var(--_theme---text);
-  padding: var(--_spacing---space--1);
+  padding: 4px;
   background-color: var(--_theme---background-2);
   border-radius: 2px;
-  mix-blend-mode: difference;
+  backdrop-filter: blur(24px);
   white-space: nowrap;
 }
 
@@ -1731,7 +1733,8 @@ button.link {
   }
 
   /* Hide desktop-only slide cursor */
-  .slide-cursor {
+  .slide-cursor,
+  .slide-cursor-badge {
     display: none;
   }
 
@@ -1791,4 +1794,42 @@ button.link {
     padding-top: var(--_spacing---space--5);
     padding-left: 0;
   }
+}
+
+/* ============================================================
+   He disagrees — animated text + cursor-follow image
+   ============================================================ */
+
+@keyframes he-disagrees-pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.he-disagrees-text {
+  animation: he-disagrees-pulse 2.8s ease-in-out infinite;
+  cursor: pointer;
+}
+
+.he-disagrees-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+}
+
+.he-disagrees-img {
+  position: relative;
+  width: calc(7rem * 2 / 3);
+  height: 7rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  transform: scale(0);
+  transform-origin: bottom center;
+  transition: transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.he-disagrees-img.is-visible {
+  transform: scale(1);
 }

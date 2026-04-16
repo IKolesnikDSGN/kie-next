@@ -30,6 +30,12 @@ export const siteSettingsSchema = defineType({
       description: 'QR-код на странице контактов',
     }),
     defineField({
+      name: 'heDisagreesImage',
+      title: 'He Disagrees Image',
+      type: 'image',
+      description: 'Фото кота — появляется при наведении на "He disagrees." на странице About',
+    }),
+    defineField({
       name: 'posterBgImage',
       title: 'Poster Background Image',
       type: 'image',
