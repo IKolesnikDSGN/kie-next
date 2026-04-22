@@ -17,21 +17,31 @@ export default function ContactClient({ cvUrl, qrUrl }: { cvUrl: string | null; 
           </div>
           <div className="contactbtm">
             <Copy animateOnScroll={false} delay={0.55} split={false}>
-              <div className="tag no-padding">
-                <p className="label">telegram</p>
+              <div className="tag no-padding is-tertiary">
+                <p className="label">upwork</p>
               </div>
             </Copy>
             <Copy animateOnScroll={false} delay={0.6}>
+              <a href="https://www.upwork.com/freelancers/~0120dc9e7dabb08683" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                <h4 className="contactlink contactmargin-bottom">Igor Kolesnik</h4>
+              </a>
+            </Copy>
+            <Copy animateOnScroll={false} delay={0.65} split={false}>
+              <div className="tag no-padding is-tertiary">
+                <p className="label">telegram</p>
+              </div>
+            </Copy>
+            <Copy animateOnScroll={false} delay={0.7}>
               <a href="https://t.me/IgorDsgn" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <h4 className="contactlink contactmargin-bottom">IgorDsgn</h4>
               </a>
             </Copy>
-            <Copy animateOnScroll={false} delay={0.65} split={false}>
-              <div className="tag no-padding">
+            <Copy animateOnScroll={false} delay={0.75} split={false}>
+              <div className="tag no-padding is-tertiary">
                 <p className="label">mail</p>
               </div>
             </Copy>
-            <Copy animateOnScroll={false} delay={0.7}>
+            <Copy animateOnScroll={false} delay={0.8}>
               <a href="mailto:kolesnikig25@gmail.com" style={{ textDecoration: 'none' }}>
                 <h4 className="contactlink">kolesnikig25@gmail.com</h4>
               </a>

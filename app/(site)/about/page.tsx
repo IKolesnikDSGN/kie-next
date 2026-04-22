@@ -61,6 +61,7 @@ export default async function AboutPage() {
             alt=""
             fill
             sizes="(max-width: 1688px) 100vw, 1688px"
+            priority
           />
         </div>
 
@@ -214,6 +215,18 @@ export default async function AboutPage() {
             </div>
             <div className="a-list">
               <MoscowTime />
+              <div className="a-list-tag">
+                <Copy split={false}>
+                  <div className="tag is-tertiary">
+                    <p className="label">upwork</p>
+                  </div>
+                </Copy>
+              </div>
+              <Copy>
+                <a href="https://www.upwork.com/freelancers/~0120dc9e7dabb08683" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+                  <h4 className="a-list-item">Igor Kolesnik</h4>
+                </a>
+              </Copy>
               <div className="a-list-tag">
                 <Copy split={false}>
                   <div className="tag is-tertiary">

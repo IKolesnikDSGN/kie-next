@@ -145,7 +145,7 @@ function FadeImage({
 //
 // bg-картинка (absolute cover) + оверлей по центру (70vw / min 500px, height auto)
 
-function BgOverlaySlideContent({ slide }: { slide: BgOverlaySlide }) {
+function BgOverlaySlideContent({ slide, eager }: { slide: BgOverlaySlide; eager?: boolean }) {
   if (!slide.background?.asset?.url || !slide.content?.asset?.url) return null
   return (
     <>
@@ -154,6 +154,7 @@ function BgOverlaySlideContent({ slide }: { slide: BgOverlaySlide }) {
         alt=""
         fill
         style={{ objectFit: 'cover' }}
+        priority={eager}
       />
       <div className="slide-overlay-center">
         <div className="slide-overlay-inner">
@@ -177,7 +178,7 @@ function BgOverlaySlideContent({ slide }: { slide: BgOverlaySlide }) {
 // Прокрутка управляется window-level wheel хандлером в SlideShowcase
 // (колёсо срабатывает на pageContent поверх, а не на элементах pageBackground).
 
-function BgScrollSlideContent({ slide }: { slide: BgScrollSlide }) {
+function BgScrollSlideContent({ slide, eager }: { slide: BgScrollSlide; eager?: boolean }) {
   const thumbRef = useRef<HTMLDivElement>(null)
   const overlayRef = useRef<HTMLDivElement>(null)
 
@@ -212,6 +213,7 @@ function BgScrollSlideContent({ slide }: { slide: BgScrollSlide }) {
         alt=""
         fill
         style={{ objectFit: 'cover' }}
+        priority={eager}
       />
       <div ref={overlayRef} className="slide-scroll-overlay">
         <div className="slide-scroll-content">
@@ -237,7 +239,7 @@ function BgScrollSlideContent({ slide }: { slide: BgScrollSlide }) {
 // Когда isActive=false (слайд ещё не активен) — текст скрыт.
 // Когда isActive становится true — монтируем Copy, который сразу играет анимацию.
 
-function InfoSlideContent({ slide, isActive }: { slide: InfoSlide; isActive: boolean }) {
+function InfoSlideContent({ slide, isActive, eager }: { slide: InfoSlide; isActive: boolean; eager?: boolean }) {
   return (
     <div className="case-info">
       <div className="case-info-column">
@@ -266,6 +268,7 @@ function InfoSlideContent({ slide, isActive }: { slide: InfoSlide; isActive: boo
             fill
             className="image"
             style={{ objectFit: 'cover' }}
+            priority={eager}
           />
         </div>
       )}
@@ -275,10 +278,10 @@ function InfoSlideContent({ slide, isActive }: { slide: InfoSlide; isActive: boo
 
 // ─── Slide content renderers ──────────────────────────────────────────────────
 
-function renderSlideContent(slide: Slide, isActive: boolean) {
+function renderSlideContent(slide: Slide, isActive: boolean, eager?: boolean) {
   switch (slide._type) {
     case 'infoSlide':
-      return <InfoSlideContent slide={slide} isActive={isActive} />
+      return <InfoSlideContent slide={slide} isActive={isActive} eager={eager} />
 
     case 'mediaSlide':
       if (!slide.media?.asset?.url) return null
@@ -290,6 +293,7 @@ function renderSlideContent(slide: Slide, isActive: boolean) {
             fill
             className="case-media"
             style={{ objectFit: 'cover' }}
+            priority={eager}
           />
           <div className="mob-media-overlay">
             <div className="mob-media-image">
@@ -307,10 +311,10 @@ function renderSlideContent(slide: Slide, isActive: boolean) {
       )
 
     case 'bgOverlaySlide':
-      return <BgOverlaySlideContent slide={slide} />
+      return <BgOverlaySlideContent slide={slide} eager={eager} />
 
     case 'bgScrollSlide':
-      return <BgScrollSlideContent slide={slide} />
+      return <BgScrollSlideContent slide={slide} eager={eager} />
 
     default:
       return null
@@ -703,7 +707,7 @@ export default function SlideShowcase() {
                 ref={(el) => { innerRefs.current[i] = el }}
                 className="case-item-inner"
               >
-                {revealedSlides.has(i) && renderSlideContent(slide, i === activeSlideIndex)}
+                {revealedSlides.has(i) && renderSlideContent(slide, i === activeSlideIndex, i === 0)}
               </div>
             </div>
           ))}
