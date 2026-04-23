@@ -38,15 +38,13 @@ export default function Nav() {
           about
         </TransitionLink>
       </div>
-      <button className="nav-btn">
-        <a
-          href="/contact"
-          onClick={handleContact}
-          className={isActive('/contact') ? 'nav-link active' : 'nav-link'}
-        >
-          contact
-        </a>
-      </button>
+      <a
+        href="/contact"
+        onClick={handleContact}
+        className={`nav-btn${isActive('/contact') ? ' nav-link active' : ' nav-link'}`}
+      >
+        contact
+      </a>
     </nav>
   )
 }

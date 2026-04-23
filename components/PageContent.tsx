@@ -192,6 +192,20 @@ export default function PageContent({ children }: { children: React.ReactNode })
         gsap.set(closeBtn, { pointerEvents: 'none' })
         gsap.to(closeBtn, { opacity: 0, duration: 0.2, ease: 'power1.in' })
       }
+    } else if (prevPath === '/contact') {
+      // Leaving /contact: stagger nav items in after polygon transition (~1200ms)
+      if (navEl) {
+        const navItems = navEl.querySelectorAll<HTMLElement>('.nav-logo, .nav-links .nav-link, .nav-btn')
+        gsap.set(navItems, { opacity: 0, y: 10 })
+        gsap.to(navItems, {
+          opacity: 1,
+          y: 0,
+          duration: 0.75,
+          ease: 'expo.out',
+          stagger: 0.09,
+          delay: 0.85,
+        })
+      }
     }
 
     // Back/forward navigation: signal background and crossfade content in

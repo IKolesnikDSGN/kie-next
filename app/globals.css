@@ -815,6 +815,12 @@ textarea:focus-visible {
   display: flex;
   align-items: center;
   padding-inline: var(--_spacing---space--1);
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.nav-btn:hover {
+  opacity: 0.7;
 }
 
 .btn-primary {
