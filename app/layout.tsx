@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Inconsolata } from 'next/font/google'
 import { ViewTransitions } from 'next-view-transitions'
+import AwwwardsRibbon from '@/components/AwwwardsRibbon'
 import './globals.css'
 
 const inconsolata = Inconsolata({
@@ -21,7 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inconsolata.variable}>
-      <body><ViewTransitions>{children}</ViewTransitions></body>
+      <body><ViewTransitions>{children}</ViewTransitions><AwwwardsRibbon /></body>
     </html>
   )
 }

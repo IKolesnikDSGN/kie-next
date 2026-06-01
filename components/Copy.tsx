@@ -102,7 +102,7 @@ export default function Copy({
         const wrapper = wrapperRef.current
         if (!inner || !wrapper) return
 
-        gsap.set(inner, { y: '130%' })
+        gsap.set(inner, { y: '110%' })
 
         const play = () => {
           const transitionDelay = document.documentElement.dataset.pageTransition ? 0.3 : 0
